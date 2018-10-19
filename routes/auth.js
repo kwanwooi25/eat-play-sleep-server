@@ -1,32 +1,37 @@
 const passport = require('../services/passport');
-const { onSuccess } = require('../utils/formatResponse');
+const { onSuccess, onFail } = require('../utils/formatResponse');
 
-const sendUserInfo = (req, res) => { res.json(onSuccess(req.user)) };
+const redirectUser = (req, res) => {
+  res.redirect(`${process.env.HOST}/home`);
+};
 
 module.exports = app => {
   
   /** Google */
   app.get('/auth/google', passport.authenticate('google', { scope: [ 'profile', 'email' ] }));
-  app.get('/auth/google/callback', passport.authenticate('google'), sendUserInfo);
+  app.get('/auth/google/callback', passport.authenticate('google'), redirectUser);
 
   /** Facebook */
   app.get('/auth/facebook', passport.authenticate('facebook'));
-  app.get('/auth/facebook/callback', passport.authenticate('facebook'), sendUserInfo);
+  app.get('/auth/facebook/callback', passport.authenticate('facebook'), redirectUser);
 
   /** Kakao */
   app.get('/auth/kakao', passport.authenticate('kakao'));
-  app.get('/auth/kakao/callback', passport.authenticate('kakao'), sendUserInfo);
+  app.get('/auth/kakao/callback', passport.authenticate('kakao'), redirectUser);
 
   /** Naver */
   app.get('/auth/naver', passport.authenticate('naver'));
-  app.get('/auth/naver/callback', passport.authenticate('naver'), sendUserInfo);
+  app.get('/auth/naver/callback', passport.authenticate('naver'), redirectUser);
   
   /** Get current user info */
-  app.get('/auth/current_user', sendUserInfo);
+  app.get('/auth/current_user', (req, res) => {
+    if (req.user) res.json(onSuccess(req.user))
+    else res.json(onFail('user not logged in'))
+  });
 
   /** Logout */
   app.get('/auth/logout', (req, res) => {
     req.logout();
-    res.json(onSuccess(req.user));
+    res.redirect('/');
   });
 }
