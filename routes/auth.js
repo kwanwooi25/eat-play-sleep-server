@@ -2,7 +2,7 @@ const passport = require('../services/passport');
 const { onSuccess, onFail } = require('../utils/formatResponse');
 
 const redirectUser = (req, res) => {
-  res.redirect(`${process.env.HOST}/home`);
+  res.redirect(`${process.env.HOST}`);
 };
 
 module.exports = app => {
