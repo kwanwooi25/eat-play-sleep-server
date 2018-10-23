@@ -28,6 +28,7 @@ db.schema.hasTable('users').then(exists => {
   if (!exists) {
     db.schema.createTable('users', table => {
         table.string('id').primary().unique().notNullable();
+        table.string('provider').notNullable();
         table.string('email');
         table.string('google_id');
         table.string('facebook_id');

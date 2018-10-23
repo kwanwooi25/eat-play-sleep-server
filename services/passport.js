@@ -13,9 +13,6 @@ const pattern = '0'; // generates Id only with numbers
 /** Database */
 const db = require('../database');
 
-/** Utility */
-const { onFail } = require('../utils/formatResponse');
-
 /** Configs */
 const googleConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
@@ -40,6 +37,7 @@ const naverConfig = {
 }
 
 /**
+ * ::: Oauth user login :::
  * find and return existing user,
  * create and return new user otherwise
  */
@@ -49,23 +47,30 @@ const findOrCreateUser = (accessToken, refreshToken, profile, done) => {
   return db('users')
     .where(`${provider}_id`, '=', id)
     .then(user => {
+      /**
+       * when the user exists,
+       * return user info
+       */
       if (user.length) {
-        // return user if exists
         return done(null, user[0]);
+      /**
+       * when user doesn't exist,
+       * create new user and return the info
+       */
       } else {
-        // create new user otherwise
         const newUser = {
           id: randomId(length, pattern),
+          provider: provider,
           [`${provider}_id`]: id
         }
 
-        db('users')
+        return db('users')
           .insert(newUser)
           .returning('*')
           .then(user => done(null, user[0]))
       }
     })
-    .catch(error => res.json(onFail(error)));;
+    .catch(error => done(null, false, error));;
 }
 
 passport.serializeUser((user, done) => {
@@ -75,9 +80,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   db('users')
     .where('id', '=', id)
-    .then(user => {
-      done(null, user[0]);
-    });
+    .then(user => done(null, user[0]));
 });
 
 passport.use(new GoogleStrategy(googleConfig, findOrCreateUser));

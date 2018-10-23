@@ -1,9 +1,19 @@
 const passport = require('../services/passport');
+const emailSignupController = require('../controllers/emailSignupController');
+const emailLoginController = require('../controllers/emailLoginController');
+const verifyToken = require('../middlewares/verifyToken');
 const { onSuccess, onFail } = require('../utils/formatResponse');
 
-const redirectUser = (req, res) => {
-  res.redirect(`${process.env.HOST}`);
-};
+const redirectUser = (req, res) => res.redirect(`${process.env.HOST}`);
+
+const sendUserInfo = (req, res) => {
+  // if user logged in oauth
+  if (req.user) res.json(onSuccess(req.user));
+  // if user logged in with email
+  else if (req.decoded) res.json(onSuccess(req.decoded));
+  // if user not logged in
+  else res.json(onFail('user not logged in'));
+}
 
 module.exports = app => {
   
@@ -22,12 +32,13 @@ module.exports = app => {
   /** Naver */
   app.get('/auth/naver', passport.authenticate('naver'));
   app.get('/auth/naver/callback', passport.authenticate('naver'), redirectUser);
-  
+
+  /** Local (email) */
+  app.post('/auth/email/signup', emailSignupController);
+  app.post('/auth/email', emailLoginController);
+
   /** Get current user info */
-  app.get('/auth/current_user', (req, res) => {
-    if (req.user) res.json(onSuccess(req.user))
-    else res.json(onFail('user not logged in'))
-  });
+  app.get('/auth/current_user', verifyToken, sendUserInfo);
 
   /** Logout */
   app.get('/auth/logout', (req, res) => {
