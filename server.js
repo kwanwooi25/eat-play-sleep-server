@@ -38,6 +38,7 @@ app.get('/', (req, res) => {
   res.send("This is EatPlaySleep Server");
 });
 require('./routes/auth')(app);
+require('./routes/baby')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);

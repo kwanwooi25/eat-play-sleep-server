@@ -34,7 +34,6 @@ db.schema.hasTable('users').then(exists => {
         table.string('facebook_id');
         table.string('kakao_id');
         table.string('naver_id');
-        table.json('babies');
     })
       .then(() => { console.log('TABLE CREATED: "users"') })
       .catch(console.log)
@@ -61,8 +60,8 @@ db.schema.hasTable('babies').then(exists => {
       table.string('name').notNullable();
       table.string('gender').notNullable();
       table.date('birthday').notNullable();
-      table.json('guardians');
-      table.json('activities');
+      table.jsonb('guardians');
+      table.jsonb('activities');
     })
       .then(() => { console.log('TABLE CREATED: "babies"') })
       .catch(console.log)
