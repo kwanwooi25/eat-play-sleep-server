@@ -1,10 +1,6 @@
 const { onSuccess, onFail } = require('../utils/formatResponse');
 const db = require('../database');
-
-/** Random ID Generator */
-const randomId = require('random-id');
-const length = 20;
-const pattern = '0'; // generates Id only with numbers
+const randomId = require('../utils/generateRandomID');
 
 module.exports = app => {
 
@@ -28,7 +24,7 @@ module.exports = app => {
   app.post('/api/babies/add', (req, res) => {
     let baby = req.body;
 
-    baby.id = randomId(length, pattern);
+    baby.id = randomId();
     baby.guardians = JSON.stringify(baby.guardians);
 
     db('babies')

@@ -22,6 +22,7 @@ const dropTableIfExists = tableName => {
 // dropTableIfExists('users');
 // dropTableIfExists('login');
 // dropTableIfExists('babies');
+// dropTableIfExists('activities');
 
 /** Create 'users' table */
 db.schema.hasTable('users').then(exists => {
@@ -61,9 +62,37 @@ db.schema.hasTable('babies').then(exists => {
       table.string('gender').notNullable();
       table.date('birthday').notNullable();
       table.jsonb('guardians');
-      table.jsonb('activities');
     })
       .then(() => { console.log('TABLE CREATED: "babies"') })
+      .catch(console.log)
+  }
+});
+
+/** Create 'activities' table */
+db.schema.hasTable('activities').then(exists => {
+  if (!exists) {
+    db.schema.createTable('activities', table => {
+      table.string('id').primary().unique().notNullable();
+      table.string('guardian_id').notNullable();
+      table.string('baby_id').notNullable();
+      table.string('name').notNullable();
+      table.string('type');
+      table.timestamp('time_start').notNullable();
+      table.timestamp('time_end');
+      table.integer('duration_left');
+      table.integer('duration_right');
+      table.integer('duration_total');
+      table.integer('amount');
+      table.string('amount_unit');
+      table.integer('height');
+      table.string('height_unit');
+      table.integer('weight');
+      table.string('weight_unit');
+      table.integer('head');
+      table.string('head_unit');
+      table.string('memo');
+    })
+      .then(() => { console.log('TABLE CREATED: "activities"') })
       .catch(console.log)
   }
 });

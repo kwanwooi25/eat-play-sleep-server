@@ -6,9 +6,7 @@ const KakaoStrategy = require('passport-kakao').Strategy;
 const NaverStrategy = require('passport-naver').Strategy;
 
 /** Random ID Generator */
-const randomId = require('random-id');
-const length = 20;
-const pattern = '0'; // generates Id only with numbers
+const randomId = require('../utils/generateRandomID');
 
 /** Database */
 const db = require('../database');
@@ -59,7 +57,7 @@ const findOrCreateUser = (accessToken, refreshToken, profile, done) => {
        */
       } else {
         const newUser = {
-          id: randomId(length, pattern),
+          id: randomId(),
           provider: provider,
           [`${provider}_id`]: id
         }

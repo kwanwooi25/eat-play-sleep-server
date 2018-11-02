@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 });
 require('./routes/auth')(app);
 require('./routes/baby')(app);
+require('./routes/activity')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
