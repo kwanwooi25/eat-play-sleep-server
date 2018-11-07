@@ -9,10 +9,12 @@ module.exports = app => {
    * get all activities by baby id
    */
   app.get('/api/activities', (req, res) => {
-    const { babyID } = req.query;
+    const { babyID, options } = req.query;
+    const { name } = JSON.parse(options);
     
     db('activities')
       .where('baby_id', '=', babyID)
+      .andWhere(function() { this.whereIn('name', name) })
       .orderBy('time_start', 'desc')
       .then(activities => res.json(onSuccess(activities)))
       .catch(error => res.json(onFail(error)));
