@@ -19,10 +19,23 @@ module.exports = app => {
   });
 
   /**
+   * GET
+   * get activity by id
+   */
+  app.get('/api/activity', (req, res) => {
+    const { activityID } = req.query;
+    
+    db('activities')
+      .where('id', '=', activityID)
+      .then(activities => res.json(onSuccess(activities[0])))
+      .catch(error => res.json(onFail(error)));
+  });
+
+  /**
    * POST
    * add activity
    */
-  app.post('/api/activities/add', (req, res) => {
+  app.post('/api/activity', (req, res) => {
     let activity = req.body;
 
     activity.id = randomId();
@@ -31,6 +44,35 @@ module.exports = app => {
       .insert(activity)
       .returning('*')
       .then(activities => res.json(onSuccess(activities[0])))
+      .catch(error => res.json(onFail(error)));
+  });
+
+  /**
+   * PUT
+   * update activity
+   */
+  app.put('/api/activity', (req, res) => {
+    const activity = req.body;
+
+    db('activities')
+      .where('id', '=', activity.id)
+      .update(activity)
+      .returning('*')
+      .then(activities => res.json(onSuccess(activities[0])))
+      .catch(error => res.json(onFail(error)));
+  });
+
+  /**
+   * DELETE
+   * delete activity
+   */
+  app.delete('/api/activity', (req, res) => {
+    const { activityID } = req.query;
+
+    db('activities')
+      .where('id', '=', activityID)
+      .delete()
+      .then(result => res.json(onSuccess(`${result} item has been deleted`)))
       .catch(error => res.json(onFail(error)));
   });
 }
