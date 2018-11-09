@@ -1,6 +1,8 @@
 const { onSuccess, onFail } = require('../utils/formatResponse');
 const db = require('../database');
 const randomId = require('../utils/generateRandomID');
+const formSummary = require('../utils/formSummary');
+const formTrendData = require('../utils/formTrendData');
 
 module.exports = app => {
 
@@ -30,6 +32,36 @@ module.exports = app => {
     db('activities')
       .where('id', '=', activityID)
       .then(activities => res.json(onSuccess(activities[0])))
+      .catch(error => res.json(onFail(error)));
+  });
+
+  /**
+   * GET
+   * get activity summary by date
+   */
+  app.get('/api/activity_summary', (req, res) => {
+    const { babyID, range } = req.query;
+    const { from, to } = JSON.parse(range);
+    
+    db('activities')
+      .where('baby_id', '=', babyID)
+      .andWhereBetween('time_start', [from, to])
+      .then(activities => res.json(onSuccess(formSummary(activities))))
+      .catch(error => res.json(onFail(error)));
+  });
+
+  /**
+   * GET
+   * get activity trend by name
+   */
+  app.get('/api/activity_trend', (req, res) => {
+    const { babyID, options } = req.query;
+    const { name, from, to } = JSON.parse(options);
+    
+    db('activities')
+      .where('baby_id', '=', babyID)
+      .andWhereBetween('time_start', [from, to])
+      .then(activities => res.json(onSuccess(formTrendData(activities, name, from, to))))
       .catch(error => res.json(onFail(error)));
   });
 
