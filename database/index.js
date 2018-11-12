@@ -19,8 +19,8 @@ const dropTableIfExists = tableName => {
   })
 }
 
-// dropTableIfExists('users');
 // dropTableIfExists('login');
+// dropTableIfExists('users');
 // dropTableIfExists('babies');
 // dropTableIfExists('activities');
 
@@ -35,23 +35,24 @@ db.schema.hasTable('users').then(exists => {
         table.string('facebook_id');
         table.string('kakao_id');
         table.string('naver_id');
+        table.jsonb('settings');
     })
       .then(() => { console.log('TABLE CREATED: "users"') })
       .catch(console.log)
   }
 });
 
-/** Create 'login' table */
-db.schema.hasTable('login').then(exists => {
-  if (!exists) {
-    db.schema.createTable('login', table => {
-      table.string('id').primary().unique().notNullable();
-      table.string('password').notNullable();
-    })
-      .then(() => { console.log('TABLE CREATED: "login"') })
-      .catch(console.log)
-  }
-});
+// /** Create 'login' table */
+// db.schema.hasTable('login').then(exists => {
+//   if (!exists) {
+//     db.schema.createTable('login', table => {
+//       table.string('id').primary().unique().notNullable();
+//       table.string('password').notNullable();
+//     })
+//       .then(() => { console.log('TABLE CREATED: "login"') })
+//       .catch(console.log)
+//   }
+// });
 
 /** Create 'babies' table */
 db.schema.hasTable('babies').then(exists => {
@@ -78,18 +79,17 @@ db.schema.hasTable('activities').then(exists => {
       table.string('name').notNullable();
       table.string('type');
       table.timestamp('time_start').notNullable();
-      table.timestamp('time_end');
       table.integer('duration_left');
       table.integer('duration_right');
       table.integer('duration_total');
       table.integer('amount');
-      table.string('amount_unit');
+      // table.string('amount_unit');
       table.integer('height');
-      table.string('height_unit');
+      // table.string('height_unit');
       table.integer('weight');
-      table.string('weight_unit');
+      // table.string('weight_unit');
       table.integer('head');
-      table.string('head_unit');
+      // table.string('head_unit');
       table.string('memo');
     })
       .then(() => { console.log('TABLE CREATED: "activities"') })
