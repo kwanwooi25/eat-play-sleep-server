@@ -38,6 +38,7 @@ app.get('/', (req, res) => {
   res.send("This is EatPlaySleep Server");
 });
 require('./routes/auth')(app);
+require('./routes/user')(app);
 require('./routes/baby')(app);
 require('./routes/activity')(app);
 

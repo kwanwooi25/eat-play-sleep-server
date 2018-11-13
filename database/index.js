@@ -35,7 +35,7 @@ db.schema.hasTable('users').then(exists => {
         table.string('facebook_id');
         table.string('kakao_id');
         table.string('naver_id');
-        table.jsonb('settings');
+        table.jsonb('settings').defaultTo('{}');
     })
       .then(() => { console.log('TABLE CREATED: "users"') })
       .catch(console.log)
@@ -61,7 +61,7 @@ db.schema.hasTable('babies').then(exists => {
       table.string('id').primary().unique().notNullable();
       table.string('name').notNullable();
       table.string('gender').notNullable();
-      table.date('birthday').notNullable();
+      table.timestamp('birthday').notNullable();
       table.jsonb('guardians');
     })
       .then(() => { console.log('TABLE CREATED: "babies"') })
