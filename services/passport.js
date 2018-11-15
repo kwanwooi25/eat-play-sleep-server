@@ -59,7 +59,8 @@ const findOrCreateUser = (accessToken, refreshToken, profile, done) => {
         const newUser = {
           id: randomId(),
           provider: provider,
-          [`${provider}_id`]: id
+          [`${provider}_id`]: id,
+          settings: {},
         }
 
         return db('users')
@@ -72,10 +73,12 @@ const findOrCreateUser = (accessToken, refreshToken, profile, done) => {
 }
 
 passport.serializeUser((user, done) => {
+  console.log('::serializeUser::',user);
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
+  console.log('::deserializeUser::',id);
   db('users')
     .where('id', '=', id)
     .then(user => done(null, user[0]));
