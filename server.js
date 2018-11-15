@@ -14,7 +14,7 @@ const app = express();
 
 /** Middlewares */
 // Enable CORS
-app.use(cors({origin: process.env.HOST}));
+app.use(cors());
 // BodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -29,9 +29,9 @@ app.use(session({
   }
 }));
 // Passport
+require('./services/passport');
 app.use(passport.initialize());
 app.use(passport.session());
-require('./services/passport');
 
 /** Routes */
 app.get('/', (req, res) => {
