@@ -4,7 +4,6 @@ require('dotenv-flow').config();
 
 /** Dependencies */
 const express = require('express');
-const passport = require('passport');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
@@ -29,7 +28,7 @@ app.use(session({
   }
 }));
 // Passport
-require('./services/passport');
+const passport = require('./services/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
