@@ -1,4 +1,4 @@
-const passport = require('../services/passport');
+const passport = require('passport');
 const { onSuccess, onFail } = require('../utils/formatResponse');
 
 const redirectUser = (req, res) => res.redirect(`${process.env.HOST}`);
