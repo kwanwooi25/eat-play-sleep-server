@@ -14,7 +14,7 @@ const app = express();
 
 /** Middlewares */
 // Enable CORS
-app.use(cors());
+app.use(cors({origin: process.env.HOST}));
 // BodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
