@@ -72,24 +72,21 @@ const findOrCreateUser = (accessToken, refreshToken, profile, done) => {
     .catch(error => done(null, false, error));;
 }
 
-module.exports = app => {
-  passport.serializeUser((user, done) => {
-    console.log('::serializeUser::',user);
-    done(null, user.id);
-  });
-  
-  passport.deserializeUser((id, done) => {
-    console.log('::deserializeUser::',id);
-    db('users')
-      .where('id', '=', id)
-      .then(user => done(null, user[0]));
-  });
-  
-  passport.use(new GoogleStrategy(googleConfig, findOrCreateUser));
-  passport.use(new FacebookStrategy(facebookConfig, findOrCreateUser));
-  passport.use(new KakaoStrategy(kakaoConfig, findOrCreateUser));
-  passport.use(new NaverStrategy(naverConfig, findOrCreateUser));
+passport.serializeUser((user, done) => {
+  console.log('::serializeUser::',user);
+  done(null, user.id);
+});
 
-  app.use(passport.initialize());
-  app.use(passport.session());
-}
+passport.deserializeUser((id, done) => {
+  console.log('::deserializeUser::',id);
+  db('users')
+    .where('id', '=', id)
+    .then(user => done(null, user[0]));
+});
+
+passport.use(new GoogleStrategy(googleConfig, findOrCreateUser));
+passport.use(new FacebookStrategy(facebookConfig, findOrCreateUser));
+passport.use(new KakaoStrategy(kakaoConfig, findOrCreateUser));
+passport.use(new NaverStrategy(naverConfig, findOrCreateUser));
+
+module.exports = passport;

@@ -28,7 +28,9 @@ app.use(session({
   }
 }));
 // Passport
-require('./services/passport')(app);
+const passport = require('./services/passport');
+app.use(passport.initialize());
+app.use(passport.session());
 
 /** Routes */
 app.get('/', (req, res) => {
