@@ -21,8 +21,8 @@ app.use(bodyParser.json());
 // use Session
 app.use(session({
   secret: process.env.COOKIE_KEY,
-  resave: true,
-  saveUninitialized: false,
+  resave: false,
+  saveUninitialized: true,
   proxy: true,
   cookie: {
     secure: false,
@@ -30,7 +30,9 @@ app.use(session({
   }
 }));
 // Passport
-require('./services/passport')(app, passport);
+app.use(passport.initialize());
+app.use(passport.session());
+require('./services/passport');
 
 /** Routes */
 app.get('/', (req, res) => {
