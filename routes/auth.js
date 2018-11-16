@@ -4,7 +4,7 @@ const { onSuccess, onFail } = require('../utils/formatResponse');
 const redirectUser = (req, res) => res.redirect(`${process.env.HOST}`);
 
 const sendUserInfo = (req, res) => {
-  console.log(req.user);
+  console.log('::req.user::', req.user);
   // if user logged in oauth
   if (req.user) res.json(onSuccess(req.user));
   // if user not logged in
