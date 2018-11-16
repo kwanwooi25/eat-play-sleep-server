@@ -15,7 +15,9 @@ module.exports = app => {
   
   /** Google */
   app.get('/auth/google', passport.authenticate('google', { scope: [ 'profile', 'email' ] }));
-  app.get('/auth/google/callback', passport.authenticate('google'), redirectUser);
+  app.get('/auth/google/callback', passport.authenticate('google'), (error, user) => {
+    console.log(error, user);
+  }, redirectUser);
 
   /** Facebook */
   app.get('/auth/facebook', passport.authenticate('facebook'));
