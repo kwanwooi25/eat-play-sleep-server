@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(session({
   secret: process.env.COOKIE_KEY,
   resave: true,
-  saveUninitialized: true,
+  saveUninitialized: false,
   proxy: true,
   cookie: {
     secure: false,
