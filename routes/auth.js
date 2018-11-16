@@ -30,7 +30,12 @@ module.exports = app => {
   app.get('/auth/naver/callback', passport.authenticate('naver'), redirectUser);
 
   /** Get current user info */
-  app.get('/auth/current_user', sendUserInfo);
+  app.get('/auth/current_user',
+    passport.authenticate('google'),
+    passport.authenticate('facebook'),
+    passport.authenticate('kakao'),
+    passport.authenticate('naver'),
+    sendUserInfo);
 
   /** Logout */
   app.get('/auth/logout', (req, res) => {
