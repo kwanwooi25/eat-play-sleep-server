@@ -6,6 +6,7 @@ require('dotenv-flow').config();
 const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const session = require('express-session');
 
@@ -18,6 +19,7 @@ app.use(cors());
 // BodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser(process.env.COOKIE_KEY));
 // use Session
 app.use(session({
   secret: process.env.COOKIE_KEY,
