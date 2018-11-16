@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 // use Session
 app.use(session({
   secret: process.env.COOKIE_KEY,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: {
     secure: false,
