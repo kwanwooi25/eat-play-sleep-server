@@ -23,9 +23,7 @@ app.use(cookieParser(process.env.COOKIE_KEY));
 // use Session
 app.use(session({
   secret: process.env.COOKIE_KEY,
-  resave: false,
   saveUninitialized: true,
-  proxy: true,
   cookie: {
     secure: false,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
