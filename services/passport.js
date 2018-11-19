@@ -15,23 +15,23 @@ const db = require('../database');
 const googleConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: '/auth/google/callback'
+  callbackURL: '/auth/google/callback',
 }
 const facebookConfig = {
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
   callbackURL: '/auth/facebook/callback',
-  profileFields: ['id', 'email']
+  profileFields: ['id', 'email'],
 }
 const kakaoConfig = {
   clientID: process.env.KAKAO_APP_ID,
   clientSecret: '',
-  callbackURL: '/auth/kakao/callback'
+  callbackURL: '/auth/kakao/callback',
 }
 const naverConfig = {
   clientID: process.env.NAVER_CLIENT_ID,
   clientSecret: process.env.NAVER_CLIENT_SECRET,
-  callbackURL: '/auth/naver/callback'
+  callbackURL: '/auth/naver/callback',
 }
 
 /**
@@ -40,10 +40,12 @@ const naverConfig = {
  * create and return new user otherwise
  */
 const findOrCreateUser = (accessToken, refreshToken, profile, done) => {
-  const { provider, id } = profile;
+  const { provider, id, emails } = profile;
+  const email = emails && emails[0].value;
 
-  return db('users')
-    .where(`${provider}_id`, '=', id)
+  db('users')
+    .where('provider', '=', provider)
+    .andWhere('provider_id', '=', id)
     .then(user => {
       /**
        * when the user exists,
@@ -59,30 +61,19 @@ const findOrCreateUser = (accessToken, refreshToken, profile, done) => {
         const newUser = {
           id: randomId(),
           provider: provider,
-          [`${provider}_id`]: id,
+          provider_id: id,
+          email: email,
           settings: {},
         }
 
         return db('users')
           .insert(newUser)
           .returning('*')
-          .then(user => done(null, user[0]))
+          .then(user => done(null, user[0]));
       }
     })
     .catch(error => done(null, false, error));;
 }
-
-passport.serializeUser((user, done) => {
-  console.log('::serializeUser::',user);
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  console.log('::deserializeUser::',id);
-  db('users')
-    .where('id', '=', id)
-    .then(user => done(null, user[0]));
-});
 
 passport.use(new GoogleStrategy(googleConfig, findOrCreateUser));
 passport.use(new FacebookStrategy(facebookConfig, findOrCreateUser));

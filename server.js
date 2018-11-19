@@ -19,20 +19,8 @@ app.use(cors());
 // BodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cookieParser(process.env.COOKIE_KEY));
-// use Session
-app.use(session({
-  secret: process.env.COOKIE_KEY,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: false,
-    maxAge: 1 * 24 * 60 * 60 * 1000, // 30 days
-  }
-}));
 // Passport
 app.use(passport.initialize());
-app.use(passport.session());
 require('./services/passport');
 
 /** Routes */
@@ -44,5 +32,5 @@ require('./routes/user')(app);
 require('./routes/baby')(app);
 require('./routes/activity')(app);
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server is running on Port:${PORT}`));
