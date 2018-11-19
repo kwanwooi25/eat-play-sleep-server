@@ -10,6 +10,7 @@ const sendUserInfo = (req, res) => {
   console.log('::req.sessionID::', req.sessionID);
   console.log('::req.session::', req.session);
   console.log('::req.user::', req.user);
+  console.log('::req::', req);
   // if user logged in oauth
   if (req.user) res.json(onSuccess(req.user));
   // if user not logged in
