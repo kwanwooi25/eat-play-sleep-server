@@ -2,8 +2,7 @@ const passport = require('passport');
 const { onSuccess, onFail } = require('../utils/formatResponse');
 
 const redirectUser = (req, res) => {
-  console.log(req);
-  res.redirect(`${origin}?token=${req.sessionID}`);
+  res.redirect(`${req.headers.referer}?token=${req.sessionID}`);
 }
 
 const sendUserInfo = (req, res) => {
