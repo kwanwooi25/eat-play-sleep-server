@@ -1,16 +1,13 @@
 const passport = require('passport');
 const { onSuccess, onFail } = require('../utils/formatResponse');
 
-const redirectUser = (req, res) => {
-  res.redirect(`${req.headers.referer}?token=${req.sessionID}`);
-}
+const redirectUser = (req, res) => res.redirect(`${process.env.HOST}`);
 
 const sendUserInfo = (req, res) => {
   console.log('::req.sessionStore::', req.sessionStore);
   console.log('::req.sessionID::', req.sessionID);
   console.log('::req.session::', req.session);
   console.log('::req.user::', req.user);
-  console.log('::req::', req);
   // if user logged in oauth
   if (req.user) res.json(onSuccess(req.user));
   // if user not logged in

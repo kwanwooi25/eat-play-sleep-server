@@ -8,8 +8,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-// const session = require('express-session');
-const session = require('cookie-session');
+const session = require('express-session');
 
 /** Initalize App */
 const app = express();
@@ -22,19 +21,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_KEY));
 // use Session
-// app.use(session({
-//   secret: process.env.COOKIE_KEY,
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     secure: false,
-//     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-//   }
-// }));
-
 app.use(session({
   secret: process.env.COOKIE_KEY,
-  maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false,
+    maxAge: 1 * 24 * 60 * 60 * 1000, // 30 days
+  }
 }));
 // Passport
 app.use(passport.initialize());
