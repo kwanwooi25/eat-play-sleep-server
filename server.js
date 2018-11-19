@@ -23,6 +23,7 @@ app.use(cookieParser(process.env.COOKIE_KEY));
 // use Session
 app.use(session({
   secret: process.env.COOKIE_KEY,
+  resave: false,
   saveUninitialized: true,
   cookie: {
     secure: false,
