@@ -31,10 +31,6 @@ db.schema.hasTable('users').then(exists => {
         table.string('provider').notNullable();
         table.string('provider_id');
         table.string('email');
-        // table.string('google_id');
-        // table.string('facebook_id');
-        // table.string('kakao_id');
-        // table.string('naver_id');
         table.jsonb('settings').defaultTo('{}');
     })
       .then(() => { console.log('TABLE CREATED: "users"') })
@@ -71,9 +67,9 @@ db.schema.hasTable('activities').then(exists => {
       table.integer('duration_right');
       table.integer('duration_total');
       table.integer('amount');
-      table.integer('height');
-      table.integer('weight');
-      table.integer('head');
+      table.float('height');
+      table.float('weight');
+      table.float('head');
       table.string('memo');
     })
       .then(() => { console.log('TABLE CREATED: "activities"') })
