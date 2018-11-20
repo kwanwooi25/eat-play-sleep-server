@@ -1,19 +1,6 @@
-const { onSuccess, onFail } = require('../utils/formatResponse');
-const db = require('../database');
+const router = require('express').Router();
+const { updateUser } = require('../controllers/user');
 
-module.exports = app => {
+router.put('/', updateUser);
 
-  /**
-   * PUT
-   * update user
-   */
-  app.put('/api/users', (req, res) => {
-    const user = req.body;
-
-    db('users')
-      .where('id', '=', user.id)
-      .update(user)
-      .then(() => res.json(onSuccess('user updated successfully')))
-      .catch(error => res.json(onFail(error)));
-  });
-}
+module.exports = router;

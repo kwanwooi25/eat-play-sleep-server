@@ -1,54 +1,41 @@
-const jwt = require('jsonwebtoken');
+const router = require('express').Router();
 const passport = require('passport');
 const isAuthenticated = require('../middlewares/isAuthenticated');
-const { onSuccess } = require('../utils/formatResponse');
+const { redirectUser, sendUserInfo } = require('../controllers/auth');
 
-const redirectUser = (req, res) => {
-  const token = jwt.sign(
-    { id: req.user.id },
-    process.env.JWT_SECRET,
-    { expiresIn: 24 * 60 * 60 },
-  );
+/** Google */
+router.get('/google', passport.authenticate('google', { scope: [ 'profile', 'email' ] }));
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { session: false }),
+  redirectUser
+);
 
-  res.redirect(`${req.headers.referer}?token=${token}`);
-}
+/** Facebook */
+router.get('/facebook', passport.authenticate('facebook'));
+router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', { session: false }),
+  redirectUser
+);
 
-const sendUserInfo = (req, res) => res.json(onSuccess(req.user));
+/** Kakao */
+router.get('/kakao', passport.authenticate('kakao'));
+router.get(
+  '/kakao/callback',
+  passport.authenticate('kakao', { session: false }),
+  redirectUser
+);
 
-module.exports = app => {
-  
-  /** Google */
-  app.get('/auth/google', passport.authenticate('google', { scope: [ 'profile', 'email' ] }));
-  app.get(
-    '/auth/google/callback',
-    passport.authenticate('google', { session: false }),
-    redirectUser
-  );
+/** Naver */
+router.get('/naver', passport.authenticate('naver'));
+router.get(
+  '/naver/callback',
+  passport.authenticate('naver', { session: false }),
+  redirectUser
+);
 
-  /** Facebook */
-  app.get('/auth/facebook', passport.authenticate('facebook'));
-  app.get(
-    '/auth/facebook/callback',
-    passport.authenticate('facebook', { session: false }),
-    redirectUser
-  );
+/** Get current user info */
+router.get('/current_user', isAuthenticated, sendUserInfo);
 
-  /** Kakao */
-  app.get('/auth/kakao', passport.authenticate('kakao'));
-  app.get(
-    '/auth/kakao/callback',
-    passport.authenticate('kakao', { session: false }),
-    redirectUser
-  );
-
-  /** Naver */
-  app.get('/auth/naver', passport.authenticate('naver'));
-  app.get(
-    '/auth/naver/callback',
-    passport.authenticate('naver', { session: false }),
-    redirectUser
-  );
-
-  /** Get current user info */
-  app.get('/auth/current_user', isAuthenticated, sendUserInfo);
-}
+module.exports = router;
