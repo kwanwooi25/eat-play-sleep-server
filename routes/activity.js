@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const {
   getActivitiesByBabyId,
+  getActivitiesBetween,
   getActivityById,
   getActivitySummaryByDate,
-  getActivityTrend,
   addActivity,
   updateActivity,
   removeActivity
@@ -15,6 +15,6 @@ router.post('/', addActivity);
 router.put('/', updateActivity);
 router.delete('/', removeActivity);
 router.get('/summary', getActivitySummaryByDate);
-router.get('/trend', getActivityTrend);
+router.get('/trend', getActivitiesBetween);
 
 module.exports = router;

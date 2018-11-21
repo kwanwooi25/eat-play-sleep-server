@@ -2,7 +2,6 @@ const { onSuccess, onFail } = require('../utils/formatResponse');
 const db = require('../database');
 const randomId = require('../utils/generateRandomID');
 const formSummary = require('../utils/formSummary');
-const formTrendData = require('../utils/formTrendData');
 
 /**
  * 
@@ -18,6 +17,24 @@ const getActivitiesByBabyId = (req, res) => {
     .where('baby_id', '=', babyID)
     .andWhere(function() { this.whereIn('name', name) })
     .orderBy('time_start', 'desc')
+    .then(activities => res.json(onSuccess(activities)))
+    .catch(error => res.json(onFail(error)));
+}
+
+/**
+ * 
+ * @param {String} req.query.babyID
+ * @param {Object} req.query.options contains activity name and search range
+ * @desc fetch activity trend data by namd and date range
+ */
+const getActivitiesBetween = (req, res) => {
+  const { babyID, options } = req.query;
+  const { name, from, to } = JSON.parse(options);
+  
+  db('activities')
+    .where('baby_id', '=', babyID)
+    .andWhere('name', '=', name)
+    .andWhereBetween('time_start', [from, to])
     .then(activities => res.json(onSuccess(activities)))
     .catch(error => res.json(onFail(error)));
 }
@@ -50,23 +67,6 @@ const getActivitySummaryByDate = (req, res) => {
     .where('baby_id', '=', babyID)
     .andWhereBetween('time_start', [from, to])
     .then(activities => res.json(onSuccess(formSummary(activities))))
-    .catch(error => res.json(onFail(error)));
-}
-
-/**
- * 
- * @param {String} req.query.babyID
- * @param {Object} req.query.options contains activity name and search range
- * @desc fetch activity trend data by namd and date range
- */
-const getActivityTrend = (req, res) => {
-  const { babyID, options } = req.query;
-  const { name, from, to } = JSON.parse(options);
-  
-  db('activities')
-    .where('baby_id', '=', babyID)
-    .andWhereBetween('time_start', [from, to])
-    .then(activities => res.json(onSuccess(formTrendData(activities, name, from, to))))
     .catch(error => res.json(onFail(error)));
 }
 
@@ -120,9 +120,9 @@ const removeActivity = (req, res) => {
 
 module.exports = {
   getActivitiesByBabyId,
+  getActivitiesBetween,
   getActivityById,
   getActivitySummaryByDate,
-  getActivityTrend,
   addActivity,
   updateActivity,
   removeActivity
