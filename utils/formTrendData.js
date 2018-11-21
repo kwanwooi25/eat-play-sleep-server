@@ -1,4 +1,9 @@
-const moment = require('moment');
+const formatDate = date => {
+  const month = `00${date.getMonth() + 1}`.slice(-2);
+  const day = `00${date.getDate()}`.slice(-2);
+  
+  return `${month}-${day}`;
+}
 
 module.exports = (activities, activityName, from, to) => {
   const trend = { name: activityName, keys: [], totalCount: 0 };
@@ -21,9 +26,9 @@ module.exports = (activities, activityName, from, to) => {
     default:
       break;
   }
-  
-  for (let i = moment(from); i < moment(to); i.add(1, 'days')) {
-    const date = i.format('MM-DD');
+
+  for (let i = new Date(from); i < new Date(to); i.setDate(i.getDate() + 1)) {
+    const date = formatDate(i);
     trend.keys.push(date);
     trend[date] = { count: 0 };
     switch (activityName) {
@@ -65,11 +70,13 @@ module.exports = (activities, activityName, from, to) => {
   }) => {
     const isNameSame = name === activityName;
     const isInRange =
-      moment(from) <= moment(time_start) &&
-      moment(time_start) <= moment(to);
-
+      new Date(from) <= new Date(time_start) &&
+      new Date(time_start) <= new Date(to);
+    
     if (isNameSame && isInRange) {
-      const date = moment(time_start).format('MM-DD');
+      const date = formatDate(new Date(time_start));
+
+      console.log(date);
   
       trend[date].count ++;
       trend.totalCount ++;
