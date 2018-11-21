@@ -12,6 +12,8 @@ const redirectUser = (req, res) => {
     { expiresIn: 24 * 60 * 60 },
   );
 
+  console.log(req.headers.referer);
+
   res.redirect(`${req.headers.referer}?token=${token}`);
 }
 
