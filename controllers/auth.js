@@ -12,9 +12,7 @@ const redirectUser = (req, res) => {
     { expiresIn: 24 * 60 * 60 },
   );
 
-  console.log(req);
-
-  res.redirect(`${req.headers.referer}?token=${token}`);
+  res.redirect(`${process.env.CLIENT_URL}?token=${token}`);
 }
 
 /**
