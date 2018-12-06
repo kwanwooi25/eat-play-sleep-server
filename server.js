@@ -10,6 +10,7 @@ const cors = require('cors');
 
 /** Initalize App */
 const app = express();
+app.enable('trust proxy');
 
 /** Middlewares */
 // Enable CORS
