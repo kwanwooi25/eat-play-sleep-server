@@ -29,11 +29,11 @@ const getActivitiesByBabyId = (req, res) => {
  */
 const getActivitiesBetween = (req, res) => {
   const { babyID, options } = req.query;
-  const { name, from, to } = JSON.parse(options);
+  const { names, from, to } = JSON.parse(options);
   
   db('activities')
     .where('baby_id', '=', babyID)
-    .andWhere('name', '=', name)
+    .andWhere(function() { this.whereIn('name', names) })
     .andWhereBetween('time_start', [from, to])
     .then(activities => res.json(onSuccess(activities)))
     .catch(error => res.json(onFail(error)));
