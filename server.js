@@ -20,8 +20,8 @@ const credentials = {
     fs.readFileSync('/etc/letsencrypt/live/api.epsapp0.com/privkey.pem', 'utf8') :
     fs.readFileSync('server.key'),
   cert:
-    fs.existsSync('/etc/letsencrypt/live/api.epsapp0.com/cert.pem') ?
-    fs.readFileSync('/etc/letsencrypt/live/api.epsapp0.com/cert.pem', 'utf8') :
+    fs.existsSync('/etc/letsencrypt/live/api.epsapp0.com/fullchain.pem') ?
+    fs.readFileSync('/etc/letsencrypt/live/api.epsapp0.com/fullchain.pem', 'utf8') :
     fs.readFileSync('server.cert'),
 };
 
