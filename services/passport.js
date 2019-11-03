@@ -16,22 +16,26 @@ const googleConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google/callback',
+  proxy: true,
 }
 const facebookConfig = {
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
   callbackURL: '/auth/facebook/callback',
   profileFields: ['id', 'email'],
+  proxy: true,
 }
 const kakaoConfig = {
   clientID: process.env.KAKAO_APP_ID,
   clientSecret: '',
   callbackURL: '/auth/kakao/callback',
+  proxy: true,
 }
 const naverConfig = {
   clientID: process.env.NAVER_CLIENT_ID,
   clientSecret: process.env.NAVER_CLIENT_SECRET,
   callbackURL: '/auth/naver/callback',
+  proxy: true,
 }
 
 /**
